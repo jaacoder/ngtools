@@ -4,30 +4,29 @@
  * License: MIT
  */
 /* global moment, numeral, Function, Inputmask */
-(function () {
+
+(function ($) {
 
     var ngtoolsModule = angular.module('jaacoder-ngtools', [])
 
     ngtoolsModule.config(['$controllerProvider', '$qProvider', function ($controllerProvider, $qProvider) {
             // save controller register function for later use
             ngtoolsModule.$controllerProvider = $controllerProvider
-            
+
             // do not throw error on unhandled rejections
             $qProvider.errorOnUnhandledRejections(false)
         }])
             .run(['$rootScope', '$location', function ($rootScope, $location) {
 
                     // save controller register function for later use
-                    var mainModule = angular.module(jQuery('[ng-app]:first').attr('ng-app'))
+                    var mainModule = angular.module($('[ng-app]:first').attr('ng-app'))
                     mainModule.controller = ngtoolsModule.$controllerProvider.register
 
                     // globals
                     $rootScope.window = window
-                    numeral.locale('pt-br')
-                    moment.locale('pt-br')
 
                     // proxy config
-                    Function.prototype.proxyConfig({methods: ['then']})
+                    Function.proxyConfig && Function.proxyConfig({methods: ['then']})
 
                     // init function
                     $rootScope.init = $rootScope.init || function (options) {
@@ -55,84 +54,48 @@
                         }, 50)
                     }
 
-        // mask
-        Inputmask.extendAliases({
-            phone: {
-                mask: "(99) 9999-9999[9]",
+                    // mask
+                    $.inputmask && $.extend($.inputmask.defaults.aliases, {
+                        phone: {
+                            mask: "(99) 9999-9999[9]",
 
-                onBeforeWrite: function(event, buffer, caretPos, opts) {
-                    if (buffer.length == 15 && buffer[9] == "-") {
-                        buffer[9] = buffer[10]
-                        buffer[10] = "-"
-                    }
-                },
+                            onBeforeWrite: function (event, buffer, caretPos, opts) {
+                                if (buffer.length == 15 && buffer[9] == "-") {
+                                    buffer[9] = buffer[10]
+                                    buffer[10] = "-"
+                                }
+                            },
 
-                greedy: false
-            },
+                            greedy: false
+                        },
 
-            numeric: {
-                mask: "9{0,+}"
-            }
-        })
-        
-//        // sync menu with url
-//        // split into hash symbol
-//        var parts = window.location.href.split('#')
-//        var href = ''
-//
-//        // is there a hash ?
-//        if (parts.length > 1) {
-//            href = '#' + parts[1].split('?')[0].split('/', 3).join('/')
-//
-//        } else {
-//            href = parts[0]
-//        }
-//
-//        $sidebarMenu = jQuery('#sidebar-menu')
-//
-//        // remove 'active' class from all menu items
-//        $lis = jQuery('li', $sidebarMenu)
-//        $lis.removeClass('active')
-//
-//        // add 'active' class to all current link parents
-//        var $link = jQuery('a[href="' + href + '"]', $sidebarMenu)
-//        $link.parents('li').addClass('active')
-//
-//        // slide down its parents
-//        $link.parents('ul').slideDown()
-//
-//        // add listener to remove 'active' from old links
-//        $sidebarMenu.on('click', function ($event) {
-//            $link = jQuery($event.target)
-//            $currentLinkParents = $link.parents('li')
-//            
-//            // remove class 'active' from other items
-//            $lis.not($currentLinkParents).removeClass('active')
-//        })
+                        numeric: {
+                            mask: "9{0,+}"
+                        }
+                    })
 
                 }])
 
-})()
+})(jQuery);
 
 
-jQuery(function() {
-    
+jQuery(function () {
+
     var $ = jQuery
-    var $document = $(document)
-    
+
     // simulate tab with enter
-    $document.on('keypress', ':input', function(e) {
+    $(document).on('keypress', ':input', function (e) {
         var $element = $(e.target)
 
-        var buttonSelector = ':button, :submit, [type=\'reset\']' 
-        var textareaSelector = 'textarea' 
+        var buttonSelector = ':button, :submit, [type=\'reset\']'
+        var textareaSelector = 'textarea'
 
         if ((e.keyCode == 13 || e.keyCode == 10)
-            && !$element.is(buttonSelector)
-            && !$element.is(textareaSelector)) {
+                && !$element.is(buttonSelector)
+                && !$element.is(textareaSelector)) {
 
             var $tabbable = $(':tabbable').filter(':input')
-            
+
             // lost focus to trigger handler events
             $element.trigger('blur')
 
@@ -141,11 +104,11 @@ jQuery(function() {
                 $tabbable.filter('.btn-primary').trigger('click')
 
             } else {
-                $tabbable.each(function(index, element) {
+                $tabbable.each(function (index, element) {
 
                     if (element == e.target) {
-                        
-                        setTimeout(function() {
+
+                        setTimeout(function () {
                             $tabbable.eq(index + 1).focus().select()
                         }, 30)
 
@@ -160,21 +123,165 @@ jQuery(function() {
 
         return true
     })
+
+});
+(function () {
     
-//    // Corrige o redimensionamento da tela quando abre um modal
-//    $(document.body).on('hide.bs.modal', function () {
-//        $('body').css('padding-right','0')
-//    })
-//    $(document.body).on('hidden.bs.modal', function () {
-//        $('body').css('padding-right','')
-//    })
-})
+    var ngtoolsModule = angular.module('jaacoder-ngtools')
+    
+    ngtoolsModule.value('formatter', {
+
+                cpf: function (input) {
+                    input = input || ''
+
+                    var out = input.substr(0, 3) + '.' + input.substr(3, 3) + '.' + input.substr(6, 3) + '-' + input.substr(9, 2)
+                    return out.replace(/[\.\-]*$/g, '')
+                },
+
+                cnpj: function (input) {
+                    input = input || ''
+
+                    var out = input.substr(0, 2) + '.' + input.substr(2, 3) + '.' + input.substr(5, 3) + '/' + input.substr(8, 4) + '-' + input.substr(12, 2)
+
+                    return out.replace(/[\.\-]*$/g, '')
+                },
+
+                date: function (input) {
+                    output = (input || '').split(' ')[0].split('-').reverse().join('/')
+                    return output
+                },
+
+                time: function (input) {
+                    return (input || '').split(':', 2).join(':')
+                },
+
+                cep: function (input) {
+                    input = input || ''
+
+                    var out = input.substr(0, 2) + '.' + input.substr(2, 3) + '-' + input.substr(5, 3)
+                    return out.replace(/[\.\-]*$/g, '')
+                },
+
+                cns: function (input) {
+                    input = input || ''
+
+                    var out = input.substr(0, 3) + '.' + input.substr(3, 4) + '.' + input.substr(7, 4) + '.' + input.substr(11, 4)
+                    return out.replace(/[\.\-]*$/g, '')
+                },
+
+                phone: function (input) {
+                    input = input || ''
+
+                    if (input.length == 0) {
+                        return ''
+                    }
+
+                    var out = ''
+                    if (input.length == 11) {
+                        out = '(' + input.substr(0, 2) + ') ' + input.substr(2, 5) + '-' + input.substr(7, 4)
+                    } else {
+                        out = '(' + input.substr(0, 2) + ') ' + input.substr(2, 4) + '-' + input.substr(6, 4)
+                    }
+
+                    return out.replace(/[\.\-]*$/g, '')
+                },
+
+                count: function (input) {
+                    if (input === undefined || input === null) {
+                        return null
+                    }
+
+                    return numeral(input).format('0,000')
+                },
+
+                numeric: function (input) {
+                    if (input === undefined || input === null) {
+                        return null
+                    }
+
+                    return (input + '' || '').replace(/\D/g, '')
+                },
+
+                decimal: function (input) {
+                    return numeral(Number(input || '')).format('0.00')
+                },
+
+                decimal4: function (input) {
+                    return numeral(Number(input || '')).format('0.0000')
+                },
+
+                currency: function (input) {
+                    return numeral(Number(input || '')).format('0,000.00')
+                },
+
+                currency4: function (input) {
+                    return numeral(Number(input || '')).format('0,000.0000')
+                },
+
+                flag: function (input) {
+                    input = (input || '')
+                    return (input === 'T') ? 'Sim' : (input === 'F') ? 'Não' : ''
+                },
+
+                apac: function (input) {
+                    input = (input || '')
+                    return (input == '2') ? 'Programa' : (input == '1') ? 'Não Programa' : ''
+                },
+
+                upper: function (input) {
+                    input = (input || '')
+                    return input.toUpperCase()
+                },
+            })
+
+            .value('parser', {
+                date: function (input) {
+                    output = (input || '').split(' ')[0].split('/').reverse().join('-')
+                    return output
+                },
+
+                decimal: function (input) {
+                    return numeral(input || '').value()
+                },
+
+                decimal4: function (input) {
+                    return numeral(input || '').value()
+                },
+
+                currency: function (input) {
+                    return numeral(input || '').value()
+                },
+
+                currency4: function (input) {
+                    return numeral(input || '').value()
+                },
+
+                count: function (input) {
+                    return Number((input || '').replace(/\./, ''))
+                },
+
+                phone: function (input) {
+                    return (input || '').replace(/\D/g, '')
+                },
+
+                cpf: function (input) {
+                    return (input || '').replace(/\D/g, '')
+                },
+
+                cep: function (input) {
+                    return (input || '').replace(/\D/g, '')
+                },
+
+                upper: function (input) {
+                    input = (input || '')
+                    return input.toUpperCase()
+                },
+            })
+})();
 (function () {
     var ngtoolsModule = angular.module('jaacoder-ngtools')
 
     ngtoolsModule.run(['$rootScope', '$http', '$location', '$q', function ($rootScope, $http, $location, $q) {
-
-            var $ = jQuery
 
             // avoid caching JS file on refresh, but caching it between refreshs
             var $ajax = $.ajax; // save the original $.ajax
@@ -305,7 +412,6 @@ jQuery(function() {
         }])
 
 })();
-
 (function () {
 
     var ngtoolsModule = angular.module('jaacoder-ngtools')
@@ -363,149 +469,6 @@ jQuery(function() {
                     }
                 }])
 
-            .factory('Pagination', function () {
-
-                return {
-                    nextPage: function (paging) {
-                        if (!paging) {
-                            return;
-                        }
-
-                        if (paging.currentPage >= paging.lastPage) {
-                            return paging.currentPage;
-                        }
-
-                        return paging.currentPage + 1;
-                    },
-
-                    previousPage: function (paging) {
-                        if (!paging) {
-                            return;
-                        }
-
-                        if (paging.currentPage <= 1) {
-                            return 1;
-                        }
-
-                        return paging.currentPage - 1;
-                    },
-
-                    isLastPage: function (paging) {
-                        if (!paging) {
-                            return;
-                        }
-
-                        return paging.lastPage <= paging.currentPage;
-                    },
-
-                    isFirstPage: function (paging) {
-                        if (!paging) {
-                            return;
-                        }
-
-                        return (paging.currentPage == 1);
-                    },
-
-                    updatePagingToPrevious: function (paging, perPage) {
-                        var previousPaging = {
-                            currentPage: paging.currentPage > 1 ? Number(paging.currentPage) - 1 : paging.currentPage,
-                            perPage: perPage === undefined ? paging.perPage : perPage
-                        };
-
-                        return angular.extend(paging, previousPaging);
-                    },
-
-                    updatePaging: function (paging, page, perPage) {
-                        var newPaging = {
-                            currentPage: page,
-                            perPage: perPage === undefined ? paging.perPage : perPage
-                        };
-
-                        return angular.extend(paging, newPaging);
-                    },
-
-                    updatePagingToNext: function (paging, perPage) {
-                        var nextPaging = {
-                            currentPage: paging.currentPage < paging.lastPage ? Number(paging.currentPage) + 1 : paging.currentPage,
-                            perPage: perPage === undefined ? paging.perPage : perPage
-                        };
-
-                        return angular.extend(paging, nextPaging);
-                    },
-
-                    alternateOrderBy: function (paging, newOrderBy) {
-
-                        var currentOrderBy = paging.orderBy;
-
-                        var parts = (currentOrderBy || '').split(' ');
-                        if (parts.length === 1) {
-                            parts.push('ASC');
-                        }
-
-                        if (parts[0] === newOrderBy) {
-                            newOrderBy += ' ' + (parts[1] === 'DESC' ? 'ASC' : 'DESC');
-                        } else {
-                            newOrderBy += ' ASC';
-                        }
-
-                        paging.orderBy = newOrderBy;
-                    },
-
-                    getSortingClass: function (paging, orderBy) {
-
-                        if (paging && paging.orderBy) {
-
-                            var parts = paging.orderBy.split(' ');
-                            if (parts.length == 1) {
-                                parts.push('ASC');
-                            }
-
-                            if (parts[0] === orderBy) {
-                                if (parts[1] === 'ASC') {
-                                    return 'sorting_asc';
-                                } else {
-                                    return 'sorting_desc';
-                                }
-                            }
-                        }
-
-                        return 'sorting';
-
-                    }
-                };
-
-            })
-
-            .directive('pagination', ['Pagination', function (Pagination) {
-
-                    return {
-
-                        restrict: 'E',
-
-                        scope: {
-                            paging: '=',
-                            action: '&'
-                        },
-
-                        link: function (scope, $element, attrs) {
-                            scope.Pagination = Pagination;
-                        },
-
-                        template:
-                                '<div class="row">' +
-                                '<div class="col-sm-4 info-number">Exibindo: {{paging.from || 0}} até {{paging.to || 0}} de {{paging.total || 0}} registro(s)</div>' +
-                                '<div class="col-sm-8 text-center">' +
-                                '<div class="page-number alignright" ng-if="paging.total > 0">' +
-                                '<span><a href="javascript:void(0)" class="btn btn-dark btn-xs" ng-click="!Pagination.isFirstPage(paging) && Pagination.updatePagingToPrevious(paging) && action()"><i class="glyphicon glyphicon-chevron-left"></i></a></span>' +
-                                '<span>página:</span>' +
-                                '<input type="text" class="form-control form-group" ng-model="paging.currentPage" onchange="$(this).scope().action()">' +
-                                '<span>de {{paging.lastPage || 1}}</span>' +
-                                '<span><a href="javaScript:void(0);" class="btn btn-dark btn-xs" ng-click="!Pagination.isLastPage(paging) && Pagination.updatePagingToNext(paging) && action()"><i class="glyphicon glyphicon-chevron-right"></i></a></span>' +
-                                '</div>' +
-                                '</div>' +
-                                '</div>'
-                    }
-                }])
 
             // thanks to: https://www.tutorialspoint.com/angularjs/angularjs_upload_file.htm
             .directive('fileModel', ['$parse', function ($parse) {
@@ -563,128 +526,6 @@ jQuery(function() {
                             return response
                         }
                     }
-                }])
-
-            // interceptor: messages
-            .factory('messagesInterceptor', ['$rootScope', '$q', function ($rootScope, $q) {
-
-                    $rootScope.showMessages = function (messages) {
-
-                        var globalMessageDisplayed = false;
-
-                        var specificMessages = {};
-                        var cssClass = 'validation-error';
-
-                        // find previous divs with cssClass
-                        $divs = $('div.' + cssClass);
-
-                        // remove all titles for tooltip
-                        $divs.removeClass(cssClass).attr('data-original-title', '')/*.children('[data-original-title]').attr('data-original-title', '')*/;
-
-                        // remove all exclamation signs
-                        $divs.children('label').children('span.' + cssClass).remove();
-
-
-                        for (var i in messages) {
-
-                            var message = messages[i];
-
-                            if (!message.propertyPath) {
-                                $rootScope.showMessage(message);
-
-                            } else {
-
-                                if (!globalMessageDisplayed) {
-                                    $rootScope.showMessage({message: 'Verifique o(s) erro(s) no(s) campo(s) em destaque.', type: 'error'});
-                                    globalMessageDisplayed = true;
-                                }
-
-                                if (!specificMessages[message.propertyPath]) {
-                                    specificMessages[message.propertyPath] = [];
-                                }
-
-                                specificMessages[message.propertyPath].push(message.message);
-                            }
-                        }
-
-
-                        for (var propertyPath in specificMessages) {
-
-                            var messagesHtml = '<span style="margin-top: 10px; text-align: left; display: inline-block"><ul><li>'
-                                    + specificMessages[propertyPath].join('</li><li>')
-                                    + '</li></ul></span>';
-
-                            var $formField = $(':tabbable[ng-model="vm.' + propertyPath + '"]').not(':disabled').not('select.select2-hidden-accessible');
-                            if ($formField.length === 0) {
-                                // select2-like combobox
-                                $formField = $('select.select2-hidden-accessible[ng-model="vm.' + propertyPath + '"]').next();
-                            }
-
-                            var $div = $formField.closest('div');
-
-                            $div.attr('data-original-title', messagesHtml)
-                                    .attr('data-html', 'true')
-                                    .attr('data-placement', 'bottom')
-                                    .attr('data-animation', 'false')
-                                    .tooltip();
-
-                            $div.children('label').append('<span class="glyphicon glyphicon-exclamation-sign validation-error" style="margin-left: 8px"></span>');
-                            $div.addClass(cssClass);
-                        }
-                    }
-
-                    $rootScope.showMessage = function (message) {
-
-                        var delay = {
-                            error: 4000,
-                            warning: 4000,
-                            info: 2000,
-                            success: 2000
-                        };
-
-                        var title = {
-                            error: 'Erro:',
-                            warning: 'Alerta:',
-                            info: 'Informação:',
-                            success: 'Sucesso:'
-                        };
-
-                        PNotify.prototype.options.styling = "bootstrap3";
-                        new PNotify({
-                            title: title[message['type']],
-                            text: message['message'],
-                            type: message['type'],
-                            animation: 'fade',
-                            hide: true,
-                            delay: delay[message['type']],
-                            buttons: {sticker: false},
-                            sound: false
-                        });
-                    }
-
-                    return {
-
-                        response: function (response) {
-
-                            appHelper.error = false
-
-                            if (response && response.data && response.data.messages) {
-                                $rootScope.showMessages(response.data.messages);
-
-                                for (i in response.data.messages) {
-                                    // modify response status so http-action will not trigger 'http-success' callback
-                                    if (response.data.messages[i].type === 'error') {
-
-                                        // reject response
-                                        return $q.reject(response)
-                                    }
-                                }
-                            }
-
-                            return response
-                        }
-                    };
-
                 }])
 
             // interceptor: loading modal
@@ -757,68 +598,69 @@ jQuery(function() {
                 }])
 
 })();
-angular.module('app')
+angular.module('jaacoder-ngtools')
 
-    .filter('cpf', function() {
-        return appHelper.fm.cpf
-    })
+    .filter('cpf', ['formatter', function(formatter) {
+        return formatter.cpf
+    }])
     
-    .filter('cnpj', function() {
-        return appHelper.fm.cnpj
-    })
+    .filter('cnpj', ['formatter', function(formatter) {
+        return formatter.cnpj
+    }])
     
-    .filter('date', function() {
-        return appHelper.fm.date
-    })
+    .filter('date', ['formatter', function(formatter) {
+        return formatter.date
+    }])
     
-    .filter('time', function() {
-        return appHelper.fm.time
-    })
+    .filter('time', ['formatter', function(formatter) {
+        return formatter.time
+    }])
     
-    .filter('cep', function() {
-        return appHelper.fm.cep
-    })
+    .filter('cep', ['formatter', function(formatter) {
+        return formatter.cep
+    }])
     
-    .filter('cns', function() {
-        return appHelper.fm.cns
-    })
+    .filter('cns', ['formatter', function(formatter) {
+        return formatter.cns
+    }])
     
-    .filter('phone', function() {
-        return appHelper.fm.phone
-    })
+    .filter('phone', ['formatter', function(formatter) {
+        return formatter.phone
+    }])
     
-    .filter('numeric', function() {
-        return appHelper.fm.numeric
-    })
+    .filter('numeric', ['formatter', function(formatter) {
+        return formatter.numeric
+    }])
     
-    .filter('count', function() {
-        return appHelper.fm.count
-    })
+    .filter('count', ['formatter', function(formatter) {
+        return formatter.count
+    }])
     
-    .filter('decimal', function() {
-        return appHelper.fm.decimal
-    })
+    .filter('decimal', ['formatter', function(formatter) {
+        return formatter.decimal
+    }])
     
-    .filter('currency', function() {
-        return appHelper.fm.currency
-    })
+    .filter('currency', ['formatter', function(formatter) {
+        return formatter.currency
+    }])
     
-    .filter('decimal4', function() {
-        return appHelper.fm.decimal4
-    })
+    .filter('decimal4', ['formatter', function(formatter) {
+        return formatter.decimal4
+    }])
     
-    .filter('currency4', function() {
-        return appHelper.fm.currency4
-    })
+    .filter('currency4', ['formatter', function(formatter) {
+        return formatter.currency4
+    }])
     
-    .filter('flag', function() {
-        return appHelper.fm.flag
-    })
+    .filter('flag', ['formatter', function(formatter) {
+        return formatter.flag
+    }])
     
-    .filter('upper', function() {
-        return appHelper.fm.upper
-    })
+    .filter('upper', ['formatter', function(formatter) {
+        return formatter.upper
+    }]);
     
+
 (function() {
     var ngtoolsModule = angular.module('jaacoder-ngtools')
         
@@ -868,9 +710,17 @@ angular.module('app')
 /* global appHelper, numeral */
 
 (function () {
+
+
+    // if ui.boostrap does not exist, exit
+    try {
+        angular.module('ui.bootstrap')
+    } catch (e) {
+        return
+    }
     
     var ngtoolsModule = angular.module('jaacoder-ngtools')
-    
+
     ngtoolsModule.run(['$rootScope', '$uibModal', function ($rootScope, $uibModal) {
 
             $rootScope.openModal = function (url, callback) {

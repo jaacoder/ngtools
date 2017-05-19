@@ -48,10 +48,10 @@
   "author": {
     "name": "jaacoder"
   },
-  "dependencies": {
-    "jaacoder-fnproxy": "0.0.3"
-  },
   "description": "Collection of angular helper functions, directives, interceptors and others.",
+  "dependencies": {
+    "jquery": "^1.12.4"
+  },
   "devDependencies": {
     "angular": "^1.6.4",
     "gulp": "^3.9.1",
@@ -78,5 +78,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.0.5"
+  "version": "0.0.6"
 }
