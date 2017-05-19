@@ -1,12 +1,17 @@
 /* global appHelper, numeral */
 
 (function () {
+
+
+    // if ui.boostrap does not exist, exit
+    try {
+        angular.module('ui.bootstrap')
+    } catch (e) {
+        return
+    }
     
     var ngtoolsModule = angular.module('jaacoder-ngtools')
-    
-    // if ui.boostrap not exists, exit
-    try {angular.module('ui.bootstrap')} catch (e) {return}
-    
+
     ngtoolsModule.run(['$rootScope', '$uibModal', function ($rootScope, $uibModal) {
 
             $rootScope.openModal = function (url, callback) {

@@ -5,30 +5,28 @@
  */
 /* global moment, numeral, Function, Inputmask */
 
-(function () {
+(function ($) {
 
     var ngtoolsModule = angular.module('jaacoder-ngtools', [])
 
     ngtoolsModule.config(['$controllerProvider', '$qProvider', function ($controllerProvider, $qProvider) {
             // save controller register function for later use
             ngtoolsModule.$controllerProvider = $controllerProvider
-            
+
             // do not throw error on unhandled rejections
             $qProvider.errorOnUnhandledRejections(false)
         }])
             .run(['$rootScope', '$location', function ($rootScope, $location) {
-                    
+
                     // save controller register function for later use
-                    var mainModule = angular.module(jQuery('[ng-app]:first').attr('ng-app'))
+                    var mainModule = angular.module($('[ng-app]:first').attr('ng-app'))
                     mainModule.controller = ngtoolsModule.$controllerProvider.register
 
                     // globals
                     $rootScope.window = window
-                    numeral.locale('pt-br')
-                    moment.updateLocale('pt-br')
 
                     // proxy config
-                    Function.prototype.proxyConfig({methods: ['then']})
+                    Function.proxyConfig && Function.proxyConfig({methods: ['then']})
 
                     // init function
                     $rootScope.init = $rootScope.init || function (options) {
@@ -56,49 +54,48 @@
                         }, 50)
                     }
 
-        // mask
-        $.extend($.inputmask.defaults.aliases, {
-            phone: {
-                mask: "(99) 9999-9999[9]",
+                    // mask
+                    $.inputmask && $.extend($.inputmask.defaults.aliases, {
+                        phone: {
+                            mask: "(99) 9999-9999[9]",
 
-                onBeforeWrite: function(event, buffer, caretPos, opts) {
-                    if (buffer.length == 15 && buffer[9] == "-") {
-                        buffer[9] = buffer[10]
-                        buffer[10] = "-"
-                    }
-                },
+                            onBeforeWrite: function (event, buffer, caretPos, opts) {
+                                if (buffer.length == 15 && buffer[9] == "-") {
+                                    buffer[9] = buffer[10]
+                                    buffer[10] = "-"
+                                }
+                            },
 
-                greedy: false
-            },
+                            greedy: false
+                        },
 
-            numeric: {
-                mask: "9{0,+}"
-            }
-        })
-        
-        }])
+                        numeric: {
+                            mask: "9{0,+}"
+                        }
+                    })
 
-})();
+                }])
+
+})(jQuery);
 
 
-jQuery(function() {
-    
+jQuery(function () {
+
     var $ = jQuery
-    var $document = $(document)
-    
+
     // simulate tab with enter
-    $document.on('keypress', ':input', function(e) {
+    $(document).on('keypress', ':input', function (e) {
         var $element = $(e.target)
 
-        var buttonSelector = ':button, :submit, [type=\'reset\']' 
-        var textareaSelector = 'textarea' 
+        var buttonSelector = ':button, :submit, [type=\'reset\']'
+        var textareaSelector = 'textarea'
 
         if ((e.keyCode == 13 || e.keyCode == 10)
-            && !$element.is(buttonSelector)
-            && !$element.is(textareaSelector)) {
+                && !$element.is(buttonSelector)
+                && !$element.is(textareaSelector)) {
 
             var $tabbable = $(':tabbable').filter(':input')
-            
+
             // lost focus to trigger handler events
             $element.trigger('blur')
 
@@ -107,11 +104,11 @@ jQuery(function() {
                 $tabbable.filter('.btn-primary').trigger('click')
 
             } else {
-                $tabbable.each(function(index, element) {
+                $tabbable.each(function (index, element) {
 
                     if (element == e.target) {
-                        
-                        setTimeout(function() {
+
+                        setTimeout(function () {
                             $tabbable.eq(index + 1).focus().select()
                         }, 30)
 
@@ -126,5 +123,5 @@ jQuery(function() {
 
         return true
     })
-    
+
 });
