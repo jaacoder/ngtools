@@ -1,0 +1,83 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "jaacoder-ngtools",
+        "scope": null,
+        "escapedName": "jaacoder-ngtools",
+        "name": "jaacoder-ngtools",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "C:\\GtiWork\\projetos\\netbeans-html-js\\temp"
+    ]
+  ],
+  "_from": "jaacoder-ngtools@latest",
+  "_id": "jaacoder-ngtools@0.0.4",
+  "_inCache": true,
+  "_location": "/jaacoder-ngtools",
+  "_nodeVersion": "7.3.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/jaacoder-ngtools-0.0.4.tgz_1493434027219_0.1550747617147863"
+  },
+  "_npmUser": {
+    "name": "jaacoder",
+    "email": "jaacoder@gmail.com"
+  },
+  "_npmVersion": "3.10.10",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "jaacoder-ngtools",
+    "scope": null,
+    "escapedName": "jaacoder-ngtools",
+    "name": "jaacoder-ngtools",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/jaacoder-ngtools/-/jaacoder-ngtools-0.0.4.tgz",
+  "_shasum": "0df1f8473b030b7e407d4a92f6254b2f09f02f79",
+  "_shrinkwrap": null,
+  "_spec": "jaacoder-ngtools",
+  "_where": "C:\\GtiWork\\projetos\\netbeans-html-js\\temp",
+  "author": {
+    "name": "jaacoder"
+  },
+  "dependencies": {
+    "jaacoder-fnproxy": "0.0.3"
+  },
+  "description": "Collection of angular helper functions, directives, interceptors and others.",
+  "devDependencies": {
+    "angular": "^1.6.4",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-expect-file": "0.0.7",
+    "webpack": "^2.4.1"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "0df1f8473b030b7e407d4a92f6254b2f09f02f79",
+    "tarball": "https://registry.npmjs.org/jaacoder-ngtools/-/jaacoder-ngtools-0.0.4.tgz"
+  },
+  "license": "MIT",
+  "main": "dist/jaacoder-ngtools.js",
+  "maintainers": [
+    {
+      "name": "jaacoder",
+      "email": "jaacoder@gmail.com"
+    }
+  ],
+  "name": "jaacoder-ngtools",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.4"
+}
