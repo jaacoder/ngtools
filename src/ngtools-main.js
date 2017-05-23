@@ -16,14 +16,18 @@
             // do not throw error on unhandled rejections
             $qProvider.errorOnUnhandledRejections(false)
         }])
-            .run(['$rootScope', '$location', function ($rootScope, $location) {
+            .run(['$rootScope', '$location', '$window', function ($rootScope, $location, $window) {
 
                     // save controller register function for later use
                     var mainModule = angular.module($('[ng-app]:first').attr('ng-app'))
                     mainModule.controller = ngtoolsModule.$controllerProvider.register
 
                     // globals
-                    $rootScope.window = window
+                    $rootScope.$window = $window
+                    
+                    // locale
+                    numeral && numeral.locale('pt-br')
+                    moment && moment.updateLocale('pt-br')
 
                     // proxy config
                     Function.proxyConfig && Function.proxyConfig({methods: ['then']})
