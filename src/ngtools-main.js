@@ -25,10 +25,6 @@
                     // globals
                     $rootScope.$window = $window
                     
-                    // locale
-                    numeral && numeral.locale('pt-br')
-                    moment && moment.updateLocale('pt-br')
-
                     // proxy config
                     Function.proxyConfig && Function.proxyConfig({methods: ['then']})
 

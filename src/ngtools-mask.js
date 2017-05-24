@@ -1,8 +1,15 @@
 (function () {
-    
-    var ngtoolsModule = angular.module('jaacoder-ngtools')
-    
-    ngtoolsModule.value('formatter', {
+
+    var ngtoolsMaskModule = angular.module('jaacoder-ngtools-mask', [])
+
+    ngtoolsMaskModule
+            .config([function () {
+                    // locale
+                    numeral && numeral.locale('pt-br')
+                    moment && moment.updateLocale('pt-br')
+                }])
+
+            .value('formatter', {
 
                 cpf: function (input) {
                     input = input || ''
@@ -91,16 +98,6 @@
                     return numeral(Number(input || '')).format('0,000.0000')
                 },
 
-                flag: function (input) {
-                    input = (input || '')
-                    return (input === 'T') ? 'Sim' : (input === 'F') ? 'Não' : ''
-                },
-
-                apac: function (input) {
-                    input = (input || '')
-                    return (input == '2') ? 'Programa' : (input == '1') ? 'Não Programa' : ''
-                },
-
                 upper: function (input) {
                     input = (input || '')
                     return input.toUpperCase()
@@ -150,4 +147,114 @@
                     return input.toUpperCase()
                 },
             })
+
+            .filter('cpf', ['formatter', function (formatter) {
+                    return formatter.cpf
+                }])
+
+            .filter('cnpj', ['formatter', function (formatter) {
+                    return formatter.cnpj
+                }])
+
+            .filter('date', ['formatter', function (formatter) {
+                    return formatter.date
+                }])
+
+            .filter('time', ['formatter', function (formatter) {
+                    return formatter.time
+                }])
+
+            .filter('cep', ['formatter', function (formatter) {
+                    return formatter.cep
+                }])
+
+            .filter('cns', ['formatter', function (formatter) {
+                    return formatter.cns
+                }])
+
+            .filter('phone', ['formatter', function (formatter) {
+                    return formatter.phone
+                }])
+
+            .filter('numeric', ['formatter', function (formatter) {
+                    return formatter.numeric
+                }])
+
+            .filter('count', ['formatter', function (formatter) {
+                    return formatter.count
+                }])
+
+            .filter('decimal', ['formatter', function (formatter) {
+                    return formatter.decimal
+                }])
+
+            .filter('currency', ['formatter', function (formatter) {
+                    return formatter.currency
+                }])
+
+            .filter('decimal4', ['formatter', function (formatter) {
+                    return formatter.decimal4
+                }])
+
+            .filter('currency4', ['formatter', function (formatter) {
+                    return formatter.currency4
+                }])
+
+            .filter('upper', ['formatter', function (formatter) {
+                    return formatter.upper
+                }])
+
+            .directive('mask', ['formatter', 'parser', function (formatter, parser) {
+
+                    var masks = {
+                        cpf: '999.999.999-99',
+                        cnpj: '99.999.999/9999-99',
+                        date: '99/99/9999',
+                        time: '99:99',
+                        cep: '99.999-999',
+                        cns: '999.9999.9999.9999',
+                        phone: 'phone',
+                        numeric: 'numeric',
+                        decimal: 'decimal',
+                        decimal4: 'decimal4',
+                        currency: 'currency',
+                        currency4: 'currency4',
+                        upper: 'upper',
+                    }
+
+                    return {
+                        restrict: 'A',
+                        require: 'ngModel',
+
+                        link: function ($scope, $element, attrs, ngModel) {
+                            ngModel.$formatters.push(formatter[attrs.mask] || function (a) {
+                                return a
+                            })
+                            ngModel.$parsers.push(parser[attrs.mask] || function (a) {
+                                return a
+                            })
+
+                            // skip some masks
+                            if (['upper'].indexOf(attrs.mask) >= 0) {
+                                $element.css('text-transform', 'uppercase')
+                                return
+                            }
+
+                            if (['decimal', 'decimal4', 'currency', 'currency4'].indexOf(attrs.mask) != -1) {
+
+                                var decimals = attrs.mask.substr(-1) === '4' ? 4 : 2;
+                                $element.maskMoney({
+                                    thousands: '.',
+                                    decimal: ',',
+                                    precision: decimals,
+                                    allowZero: true
+                                });
+
+                            } else {
+                                $element.inputmask(masks[attrs.mask]);
+                            }
+                        }
+                    }
+                }])
+
 })();

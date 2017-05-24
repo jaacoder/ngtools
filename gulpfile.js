@@ -13,13 +13,12 @@ gulp.task('bundle', ['clean'], function(){
     
     var files = [
         'src/ngtools-main.js',
-        'src/ngtools-helper.js',
-        'src/ngtools-ajax.js',
-        'src/ngtools-directives.js',
-        'src/ngtools-interceptors.js',
-        'src/ngtools-filters.js',
-        'src/ngtools-routes.js',
-        'src/ngtools-modal.js',
+        'src/ngtools-main-ajax.js',
+        'src/ngtools-main-interceptors.js',
+        'src/ngtools-main-modal.js',
+        'src/ngtools-main-routes.js',
+        'src/ngtools-main-upload.js',
+        'src/ngtools-mask.js',
     ]
     
     return gulp.src(files)
