@@ -29,14 +29,19 @@
              */
             $rootScope.httpSuccess = function (response, config) {
                 var scope = response.scope
-                config = angular.merge({copyMethod: 'extend'}, config || {})
+                config = angular.merge({copyMethod: 'extend', dest: 'vm'}, config || {})
 
                 if (response.data && angular.isObject(response.data)) {
 
+                    if (config.copyMethod) {
+                        if (!_.has(scope, config.dest)) {
+                            _.set(scope, config.dest, angular.isArray(response.data) ? [] : {})
+                        }
+                        
+                        angular[config.copyMethod](_.get(scope, config.dest), response.data)
+                    }
+
                     var oldView = (scope.vm && scope.vm.view) || null;
-
-                    angular[config.copyMethod](scope.vm, response.data)
-
                     if (!scope.modal && response.data.view && response.data.view != oldView) {
                         $location.skipResolving(scope.vm).path(S(response.config.url).ensureLeft('/').s)
                     }
@@ -58,10 +63,12 @@
                 var scope = this
                 var url = '' + url // convert url to string
 
-                if (url.substr(0, 1) !== '/') {
-                    url = S(scope.baseUrl + '/' + url).chompLeft('/').s
-                } else {
-                    url = S(url).chompLeft('/').s
+                if (url.substr(0, 4) !== 'http') {
+                    if (url.substr(0, 1) !== '/') {
+                        url = S(scope.baseUrl + '/' + url).chompLeft('/').s
+                    } else {
+                        url = S(url).chompLeft('/').s
+                    }
                 }
 
                 return $http[method.toLowerCase()](url, data, config).then(function (response) {

@@ -6,7 +6,14 @@
             .config([function () {
                     // locale
                     numeral && numeral.locale('pt-br')
-                    moment && moment.updateLocale('pt-br')
+                    
+                    if (moment) {
+                        if (moment.updateLocale) {
+                            moment.updateLocale('pt-br')
+                        } else {
+                            moment.locale('pt-br')
+                        }
+                    }
                 }])
 
             .value('formatter', {
