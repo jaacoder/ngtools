@@ -14,6 +14,33 @@
                             moment.locale('pt-br')
                         }
                     }
+                    
+                    // mask aliases
+                    var maskAliases = {
+                        phone: {
+                            mask: "(99) 9999-9999[9]",
+
+                            onBeforeWrite: function (event, buffer, caretPos, opts) {
+                                if (buffer.length == 15 && buffer[9] == "-") {
+                                    buffer[9] = buffer[10]
+                                    buffer[10] = "-"
+                                }
+                            },
+
+                            greedy: false
+                        },
+
+                        numeric: {
+                            mask: "9{0,+}"
+                        }
+                    }
+                    
+                    if (Inputmask) {
+                        Inputmask.extendAliases(maskAliases)
+                    } else if ($.inputmask) {
+                        $.extend($.inputmask.defaults.aliases, maskAliases)
+                    }
+                    
                 }])
 
             .value('formatter', {
