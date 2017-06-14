@@ -1,8 +1,8 @@
 (function () {
 
-    var ngtoolsMaskModule = angular.module('jaacoder-ngtools-mask', [])
+    var ngtoolsModule = angular.module('jaacoder-ngtools')
 
-    ngtoolsMaskModule
+    ngtoolsModule
             .config([function () {
                     // locale
                     numeral && numeral.locale('pt-br')

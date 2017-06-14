@@ -51,7 +51,7 @@
                     $rootScope.focus = function () {
                         setTimeout(function () {
                             $(':input:focusable:tabbable:first').focus().select()
-                        }, 50)
+                        }, 200)
                     }
 
                 }])

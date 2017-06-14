@@ -115,14 +115,6 @@
                     },
                     size: 'lg'
                 })
-
-//            $rootScope.openPopup = true
-//            $rootScope.popupInstance = modal
-//
-//            modal.closed.then(function() {
-//                $rootScope.openPopup = false
-//                $rootScope.popupInstance = null
-//            })
             }
         }])
 })();

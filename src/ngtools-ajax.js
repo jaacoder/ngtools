@@ -33,15 +33,15 @@
 
                 if (response.data && angular.isObject(response.data)) {
 
+                    var oldView = (scope.vm && scope.vm.view) || null;
                     if (config.copyMethod) {
-                        if (!_.has(scope, config.dest)) {
+                        if (!_.hasIn(scope, config.dest)) {
                             _.set(scope, config.dest, angular.isArray(response.data) ? [] : {})
                         }
                         
                         angular[config.copyMethod](_.get(scope, config.dest), response.data)
                     }
 
-                    var oldView = (scope.vm && scope.vm.view) || null;
                     if (!scope.modal && response.data.view && response.data.view != oldView) {
                         $location.skipResolving(scope.vm).path(S(response.config.url).ensureLeft('/').s)
                     }

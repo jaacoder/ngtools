@@ -137,9 +137,9 @@ jQuery(function () {
             $rootScope.httpSuccess = function (response, config) {
                 var scope = response.scope
                 config = angular.merge({copyMethod: 'extend', dest: 'vm'}, config || {})
-
+                
                 if (response.data && angular.isObject(response.data)) {
-
+                    
                     var oldView = (scope.vm && scope.vm.view) || null;
                     if (config.copyMethod) {
                         if (!_.hasIn(scope, config.dest)) {
@@ -182,7 +182,7 @@ jQuery(function () {
 
                     // save scope for custom use
                     response.scope = scope
-
+                    
                     if (scope.httpSuccess && angular.isFunction(scope.httpSuccess)) {
                         return scope.httpSuccess(response, config)
                         //
@@ -192,7 +192,7 @@ jQuery(function () {
 
                     //
                 }, function (response) {
-
+                    
                     return $q.reject(response)
                 })
             }
