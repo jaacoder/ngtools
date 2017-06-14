@@ -473,15 +473,6 @@ jQuery(function () {
                     },
                     size: 'lg'
                 })
-
-//            $rootScope.openPopup = true
-//            $rootScope.popupInstance = modal
-//
-//                modal.closed.then(function() {
-//                    $rootScope.modal = false
-//                    $rootScope.popupInstance = null
-//                })
-            
             }
         }])
 })();
@@ -562,9 +553,9 @@ jQuery(function () {
 })();
 (function () {
 
-    var ngtoolsMaskModule = angular.module('jaacoder-ngtools-mask', [])
+    var ngtoolsModule = angular.module('jaacoder-ngtools')
 
-    ngtoolsMaskModule
+    ngtoolsModule
             .config([function () {
                     // locale
                     numeral && numeral.locale('pt-br')
