@@ -35,6 +35,7 @@
                         }
                     }
                     
+                    var Inputmask = Inputmask || null
                     if (Inputmask) {
                         Inputmask.extendAliases(maskAliases)
                     } else if ($.inputmask) {
