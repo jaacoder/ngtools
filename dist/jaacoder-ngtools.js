@@ -134,7 +134,7 @@ jQuery(function () {
              * @param {Object} config
              * @return {Object}
              */
-            $rootScope.httpSuccess = function (response, config) {
+            $rootScope.processResponse = function (response, config) {
                 var scope = response.scope
                 config = angular.merge({copyMethod: 'extend', dest: 'vm'}, config || {})
 
@@ -183,8 +183,8 @@ jQuery(function () {
                     // save scope for custom use
                     response.scope = scope
 
-                    if (scope.httpSuccess && angular.isFunction(scope.httpSuccess)) {
-                        return scope.httpSuccess(response, config)
+                    if (scope.processResponse && angular.isFunction(scope.processResponse)) {
+                        return scope.processResponse(response, config)
                         //
                     } else {
                         return response
@@ -192,6 +192,16 @@ jQuery(function () {
 
                     //
                 }, function (response) {
+
+                    // save scope for custom use
+                    response.scope = scope
+
+                    if (scope.processResponse && angular.isFunction(scope.processResponse) && response.config.processingResponse !== false) {
+                        return $q.reject(scope.processResponse(response, config))
+                        //
+                    } else {
+                        return $q.reject(response)
+                    }
 
                     return $q.reject(response)
                 })
