@@ -24,6 +24,7 @@
 
                     // globals
                     $rootScope.$window = $window
+                    $rootScope.window = window
                     
                     // proxy config
                     Function.proxyConfig && Function.proxyConfig({methods: ['then']})
