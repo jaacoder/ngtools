@@ -35,9 +35,8 @@
                         }
                     }
                     
-                    var Inputmask = Inputmask || null
-                    if (Inputmask) {
-                        Inputmask.extendAliases(maskAliases)
+                    if (window.Inputmask) {
+                        window.Inputmask.extendAliases(maskAliases)
                     } else if ($.inputmask) {
                         $.extend($.inputmask.defaults.aliases, maskAliases)
                     }
