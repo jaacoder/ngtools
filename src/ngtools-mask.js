@@ -1,3 +1,5 @@
+/* global moment */
+/* global numeral */
 (function () {
 
     var ngtoolsModule = angular.module('jaacoder-ngtools')

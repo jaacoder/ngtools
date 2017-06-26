@@ -82,7 +82,7 @@ jQuery(function () {
 
             // if ctrl pressed, find primary button and trigger it
             if (e.ctrlKey) {
-                $tabbable.filter('.btn-primary').trigger('click')
+                $tabbable.filter('.btn-primary:eq(0)').trigger('click')
 
             } else {
                 $tabbable.each(function (index, element) {
@@ -257,6 +257,7 @@ jQuery(function () {
         }])
 
 })();
+
 (function () {
     
     var ngtoolsModule = angular.module('jaacoder-ngtools')
@@ -562,6 +563,8 @@ jQuery(function () {
                 }]);
 
 })();
+/* global moment */
+/* global numeral */
 (function () {
 
     var ngtoolsModule = angular.module('jaacoder-ngtools')
