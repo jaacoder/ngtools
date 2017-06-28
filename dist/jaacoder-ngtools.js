@@ -592,6 +592,8 @@ jQuery(function () {
                                     buffer[9] = buffer[10]
                                     buffer[10] = "-"
                                 }
+                                
+                                return {}
                             },
 
                             greedy: false
