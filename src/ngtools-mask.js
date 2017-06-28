@@ -49,6 +49,10 @@
 
                 cpf: function (input) {
                     input = input || ''
+                    
+                    if (input.length < 11) {
+                        input = _.padStart(input, 11, '0')
+                    }
 
                     var out = input.substr(0, 3) + '.' + input.substr(3, 3) + '.' + input.substr(6, 3) + '-' + input.substr(9, 2)
                     return out.replace(/[\.\-]*$/g, '')
@@ -56,6 +60,10 @@
 
                 cnpj: function (input) {
                     input = input || ''
+                    
+                    if (input.length < 14) {
+                        input = _.padStart(input, 14, '0')
+                    }
 
                     var out = input.substr(0, 2) + '.' + input.substr(2, 3) + '.' + input.substr(5, 3) + '/' + input.substr(8, 4) + '-' + input.substr(12, 2)
 
@@ -73,6 +81,10 @@
 
                 cep: function (input) {
                     input = input || ''
+                    
+                    if (input.length < 8) {
+                        input = _.padStart(input, 8, '0')
+                    }
 
                     var out = input.substr(0, 2) + '.' + input.substr(2, 3) + '-' + input.substr(5, 3)
                     return out.replace(/[\.\-]*$/g, '')
@@ -80,6 +92,10 @@
 
                 cns: function (input) {
                     input = input || ''
+                    
+                    if (input.length < 15) {
+                        input = _.padStart(input, 15, '0')
+                    }
 
                     var out = input.substr(0, 3) + '.' + input.substr(3, 4) + '.' + input.substr(7, 4) + '.' + input.substr(11, 4)
                     return out.replace(/[\.\-]*$/g, '')
@@ -90,6 +106,8 @@
 
                     if (input.length == 0) {
                         return ''
+                    } else if (input.length < 10) {
+                        input = _.padStart(input, 10, '0')
                     }
 
                     var out = ''
