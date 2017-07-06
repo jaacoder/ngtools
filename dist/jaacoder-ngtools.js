@@ -456,8 +456,13 @@ jQuery(function () {
                     appendTo: angular.element($('[ng-view]')),
                     controller: ['$scope', function ($scope) {
                             $scope.modal = true
+                            
                             $scope.modalCallback = function () {
                                 realCallback.apply(parentScope, arguments)
+                                modal.close()
+                            }
+                            
+                            $scope.closeModal = function () {
                                 modal.close()
                             }
 
@@ -485,6 +490,8 @@ jQuery(function () {
                     },
                     size: 'lg'
                 })
+                
+                return modal
             }
         }])
 })();

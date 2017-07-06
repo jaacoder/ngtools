@@ -120,6 +120,8 @@
                     },
                     size: 'lg'
                 })
+                
+                return modal
             }
         }])
 })();
