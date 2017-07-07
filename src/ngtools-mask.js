@@ -9,13 +9,8 @@
                     // locale
                     numeral && numeral.locale('pt-br')
                     
-                    if (moment) {
-                        if (moment.updateLocale) {
-                            moment.updateLocale('pt-br')
-                        } else {
-                            moment.locale('pt-br')
-                        }
-                    }
+                    // moment
+                    moment && moment.locale('pt-br')
                     
                     // mask aliases
                     var maskAliases = {
