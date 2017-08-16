@@ -47,7 +47,7 @@
                 cpf: function (input) {
                     input = input || ''
                     
-                    if (input.length < 11) {
+                    if (input.length && input.length < 11) {
                         input = _.padStart(input, 11, '0')
                     }
 
@@ -58,7 +58,7 @@
                 cnpj: function (input) {
                     input = input || ''
                     
-                    if (input.length < 14) {
+                    if (input.length && input.length < 14) {
                         input = _.padStart(input, 14, '0')
                     }
 
@@ -79,7 +79,7 @@
                 cep: function (input) {
                     input = input || ''
                     
-                    if (input.length < 8) {
+                    if (input.length && input.length < 8) {
                         input = _.padStart(input, 8, '0')
                     }
 
@@ -90,7 +90,7 @@
                 cns: function (input) {
                     input = input || ''
                     
-                    if (input.length < 15) {
+                    if (input.length && input.length < 15) {
                         input = _.padStart(input, 15, '0')
                     }
 
