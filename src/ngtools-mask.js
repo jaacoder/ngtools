@@ -189,7 +189,15 @@
                     return (input || '').replace(/\D/g, '')
                 },
 
+                cnpj: function (input) {
+                    return (input || '').replace(/\D/g, '')
+                },
+
                 cep: function (input) {
+                    return (input || '').replace(/\D/g, '')
+                },
+
+                cns: function (input) {
                     return (input || '').replace(/\D/g, '')
                 },
 
