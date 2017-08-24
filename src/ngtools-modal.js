@@ -51,7 +51,7 @@
                     return
                 }
 
-                var view = 'views/' + module + '/' + controller + '/' + (queryParams.view || controller) + '.html'
+                var view = ngtoolsModule.mainModule.viewPathWithSlash() + module + '/' + controller + '/' + (queryParams.view || controller) + '.html'
 
                 // prepare callback function
                 var realCallback = function () {}

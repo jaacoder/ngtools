@@ -7,9 +7,11 @@
     ngtoolsModule
             .config([function () {
                     // locale
+                    var numeral = numeral || null
                     numeral && numeral.locale('pt-br')
                     
                     // moment
+                    var moment = moment || null
                     moment && moment.locale('pt-br')
                     
                     // mask aliases

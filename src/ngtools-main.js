@@ -8,19 +8,20 @@
 (function ($) {
 
     var ngtoolsModule = angular.module('jaacoder-ngtools', [])
-
     ngtoolsModule.config(['$controllerProvider', '$qProvider', function ($controllerProvider, $qProvider) {
             // save controller register function for later use
             ngtoolsModule.$controllerProvider = $controllerProvider
 
             // do not throw error on unhandled rejections
             $qProvider.errorOnUnhandledRejections(false)
+            
+            // save main module for later use
+            ngtoolsModule.mainModule = angular.module($('[ng-app]:first').attr('ng-app'))
         }])
             .run(['$rootScope', '$location', '$window', function ($rootScope, $location, $window) {
 
                     // save controller register function for later use
-                    var mainModule = angular.module($('[ng-app]:first').attr('ng-app'))
-                    mainModule.controller = ngtoolsModule.$controllerProvider.register
+                    ngtoolsModule.mainModule.controller = ngtoolsModule.$controllerProvider.register
 
                     // globals
                     $rootScope.$window = $window

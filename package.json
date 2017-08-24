@@ -49,15 +49,15 @@
     "name": "jaacoder"
   },
   "description": "Collection of angular helper functions, directives, interceptors and others.",
-  "dependencies": {
-    "jquery": "^1.12.4"
-  },
+  "dependencies": {},
   "devDependencies": {
     "angular": "^1.6.4",
+    "angular-route": "^1.6.4",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
     "gulp-concat": "^2.6.1",
-    "gulp-expect-file": "0.0.7"
+    "gulp-expect-file": "0.0.7",
+    "jquery": "^1.12.4"
   },
   "directories": {},
   "dist": {
@@ -73,7 +73,7 @@
     }
   ],
   "name": "jaacoder-ngtools",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "optionalDependencies": {},
   "readme": "ERROR: No README data found!",
   "scripts": {

@@ -16,6 +16,18 @@
                     // remove '!' as hash prefix
                     $locationProvider.hashPrefix('')
 
+                    // view path could be customized
+                    console.log('view: ' + ngtoolsModule.mainModule.view)
+                    ngtoolsModule.mainModule.viewPath = 'views'
+                    ngtoolsModule.mainModule.viewPathWithSlash = function () {
+                        if (!ngtoolsModule.mainModule.viewPath) {
+                            return ''
+                        } else {
+                            return ngtoolsModule.mainModule.viewPath + '/'
+                        }
+                    }
+
+
                     $routeProvider.when('/:page*.html', {
                         templateUrl: function (params) {
                             return params.page + '.html'
@@ -43,7 +55,7 @@
                                         }]
                                 },
                                 templateUrl: function (params) {
-                                    return 'views/' + params.module + '/' + params.controller + '/' + params.controller + '.html'
+                                    return ngtoolsModule.mainModule.viewPathWithSlash() + params.module + '/' + params.controller + '/' + params.controller + '.html'
                                 }
                             })
 
