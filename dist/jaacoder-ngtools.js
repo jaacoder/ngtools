@@ -8,19 +8,20 @@
 (function ($) {
 
     var ngtoolsModule = angular.module('jaacoder-ngtools', [])
-
     ngtoolsModule.config(['$controllerProvider', '$qProvider', function ($controllerProvider, $qProvider) {
             // save controller register function for later use
             ngtoolsModule.$controllerProvider = $controllerProvider
 
             // do not throw error on unhandled rejections
             $qProvider.errorOnUnhandledRejections(false)
+            
+            // save main module for later use
+            ngtoolsModule.mainModule = angular.module($('[ng-app]:first').attr('ng-app'))
         }])
             .run(['$rootScope', '$location', '$window', function ($rootScope, $location, $window) {
 
                     // save controller register function for later use
-                    var mainModule = angular.module($('[ng-app]:first').attr('ng-app'))
-                    mainModule.controller = ngtoolsModule.$controllerProvider.register
+                    ngtoolsModule.mainModule.controller = ngtoolsModule.$controllerProvider.register
 
                     // globals
                     $rootScope.$window = $window
@@ -421,7 +422,7 @@ jQuery(function () {
                     return
                 }
 
-                var view = 'views/' + module + '/' + controller + '/' + (queryParams.view || controller) + '.html'
+                var view = ngtoolsModule.mainModule.viewPathWithSlash() + module + '/' + controller + '/' + (queryParams.view || controller) + '.html'
 
                 // prepare callback function
                 var realCallback = function () {}
@@ -513,6 +514,18 @@ jQuery(function () {
                     // remove '!' as hash prefix
                     $locationProvider.hashPrefix('')
 
+                    // view path could be customized
+                    console.log('view: ' + ngtoolsModule.mainModule.view)
+                    ngtoolsModule.mainModule.viewPath = 'views'
+                    ngtoolsModule.mainModule.viewPathWithSlash = function () {
+                        if (!ngtoolsModule.mainModule.viewPath) {
+                            return ''
+                        } else {
+                            return ngtoolsModule.mainModule.viewPath + '/'
+                        }
+                    }
+
+
                     $routeProvider.when('/:page*.html', {
                         templateUrl: function (params) {
                             return params.page + '.html'
@@ -540,7 +553,7 @@ jQuery(function () {
                                         }]
                                 },
                                 templateUrl: function (params) {
-                                    return 'views/' + params.module + '/' + params.controller + '/' + params.controller + '.html'
+                                    return ngtoolsModule.mainModule.viewPathWithSlash() + params.module + '/' + params.controller + '/' + params.controller + '.html'
                                 }
                             })
 
@@ -579,9 +592,11 @@ jQuery(function () {
     ngtoolsModule
             .config([function () {
                     // locale
+                    var numeral = numeral || null
                     numeral && numeral.locale('pt-br')
                     
                     // moment
+                    var moment = moment || null
                     moment && moment.locale('pt-br')
                     
                     // mask aliases
