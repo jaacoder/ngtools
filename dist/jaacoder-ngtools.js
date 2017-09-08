@@ -151,7 +151,7 @@ jQuery(function () {
                         angular[config.copyMethod](_.get(scope, config.dest), response.data)
                     }
 
-                    if (!scope.modal && response.data.view && response.data.view != oldView) {
+                    if (!scope.modal && response.data.view /*&& response.data.view != oldView*/) {
                         $location.skipResolving(scope.vm).path(S(response.config.url).ensureLeft('/').s)
                     }
                 }
