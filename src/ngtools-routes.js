@@ -17,7 +17,6 @@
                     $locationProvider.hashPrefix('')
 
                     // view path could be customized
-                    console.log('view: ' + ngtoolsModule.mainModule.view)
                     ngtoolsModule.mainModule.viewPath = 'views'
                     ngtoolsModule.mainModule.viewPathWithSlash = function () {
                         if (!ngtoolsModule.mainModule.viewPath) {
