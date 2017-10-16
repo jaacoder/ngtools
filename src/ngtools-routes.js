@@ -45,7 +45,8 @@
 
                                             var deferred = $q.defer()
 
-                                            $http.get($location.$$path.substr(1)).then(function (response) {
+                                            //$http.get($location.$$path.substr(1)).then(function (response) {
+                                            $http.get(location.hash.substr(2)).then(function (response) {
                                                 routeResolution = angular.isObject(response.data) ? response.data : {}
                                                 deferred.resolve(routeResolution)
                                             })

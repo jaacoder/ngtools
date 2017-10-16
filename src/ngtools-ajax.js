@@ -43,7 +43,9 @@
                     }
 
                     if (!scope.modal && response.data.view /*&& response.data.view != oldView*/) {
-                        $location.skipResolving(scope.vm).path(S(response.config.url).ensureLeft('/').s)
+                        //$location.skipResolving(scope.vm).path(S(response.config.url).ensureLeft('/').s)
+                        $location.skipResolving(scope.vm)
+                        location.hash = S(response.config.url).ensureLeft('#/').s
                     }
                 }
 
